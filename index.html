@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lifetime Tree Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        body {
+            background: linear-gradient(rgba(8, 20, 10, 0.72), rgba(8, 20, 10, 0.88)),
+                        url('https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=2560&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 60px 20px 80px;
+            color: white;
+            text-align: center;
+            animation: fadeIn 0.35s ease;
+        }
+
+        h1 {
+            font-size: 3.2rem;
+            font-weight: 300;
+            letter-spacing: -0.5px;
+            margin: 0 0 12px 0;
+            color: #fff;
+        }
+
+        .subtitle {
+            color: rgba(255,255,255,0.5);
+            font-size: 1rem;
+            font-weight: 400;
+            margin-bottom: 64px;
+        }
+
+        /* Stats */
+        .global-dashboard {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin: 0 auto 48px auto;
+            max-width: 860px;
+            flex-wrap: wrap;
+        }
+
+        .global-stat {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 28px 36px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            min-width: 200px;
+            transition: background 0.3s ease, transform 0.3s ease;
+            flex: 1;
+        }
+
+        .global-stat:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-3px);
+        }
+
+        .global-stat h3 {
+            margin: 0 0 14px 0;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .global-stat p {
+            margin: 0;
+            font-size: 2.4rem;
+            font-weight: 300;
+            color: #fff;
+            letter-spacing: -1px;
+        }
+
+        .global-stat p .unit {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 0;
+        }
+
+        /* Timeline */
+        .road-container {
+            position: relative;
+            max-width: 320px;
+            margin: 0 auto;
+            padding: 10px 0 30px;
+        }
+
+        .road-container::after {
+            content: '';
+            position: absolute;
+            width: 1px;
+            background: rgba(255, 255, 255, 0.12);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .milestone-wrap {
+            position: relative;
+            z-index: 1;
+            margin: 20px 0;
+        }
+
+        .milestone-wrap::before {
+            content: '';
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            background: rgba(255,255,255,0.45);
+            border-radius: 50%;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+
+        /* Current year dot — brighter, slightly larger */
+        .milestone-wrap.current-wrap::before {
+            width: 8px;
+            height: 8px;
+            background: rgba(255,255,255,0.9);
+        }
+
+        .milestone {
+            position: relative;
+            z-index: 3;
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: rgba(255,255,255,0.85);
+            padding: 13px 36px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 1rem;
+            display: inline-block;
+            transition: all 0.25s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            letter-spacing: 0.01em;
+        }
+
+        .milestone:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff;
+            border-color: rgba(255,255,255,0.2);
+            transform: scale(1.04);
+        }
+
+        /* Current year — brighter border and text */
+        .milestone.current-year {
+            color: #fff;
+            border-color: rgba(255,255,255,0.28);
+        }
+
+        /* Overall Forest is the primary CTA */
+        .forest-milestone {
+            background: rgba(255, 255, 255, 0.92);
+            color: #0a1a0c;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            padding: 15px 40px;
+        }
+
+        .forest-milestone:hover {
+            background: #fff;
+            color: #0a1a0c;
+            transform: scale(1.04);
+        }
+    </style>
+</head>
+<body>
+    <h1>Lifetime Forest</h1>
+    <p class="subtitle">Tracking every sapling, every year.</p>
+
+    <div class="global-dashboard">
+        <div class="global-stat">
+            <h3>Total Trees</h3>
+            <p id="index-total-trees">0</p>
+        </div>
+        <div class="global-stat">
+            <h3>CO₂ Captured</h3>
+            <p><span id="index-total-co2">0</span> <span class="unit">kg</span></p>
+        </div>
+        <div class="global-stat">
+            <h3>Green Cover</h3>
+            <p><span id="index-green-cover">0</span> <span class="unit">sq m</span></p>
+        </div>
+    </div>
+
+    <div class="road-container" id="road-container">
+        <div class="milestone-wrap"><a href="overall-forest.html" class="milestone forest-milestone">Overall Forest</a></div>
+    </div>
+
+    <script src="utils.js"></script>
+    <script src="data.js"></script>
+    <script>
+        const currentYear = new Date().getFullYear();
+
+        const localTrees = getLocalTrees();
+        const combinedData = [...allTreeData, ...localTrees];
+
+        let totalTrees = 0;
+        let totalCO2 = 0;
+
+        combinedData.forEach(tree => {
+            if (!tree.count || !tree.year || tree.age == null) return;
+            const yearsActive = Math.max(0, (currentYear - tree.year) + tree.age);
+            totalCO2 += tree.count * yearsActive * 10;
+            totalTrees += tree.count;
+        });
+
+        const totalGreenCover = totalTrees * 4;
+
+        document.getElementById('index-total-trees').textContent = totalTrees.toLocaleString();
+        document.getElementById('index-total-co2').textContent = totalCO2.toLocaleString();
+        document.getElementById('index-green-cover').textContent = totalGreenCover.toLocaleString();
+
+        // Build year timeline dynamically; highlight the current year
+        const years = [...new Set([currentYear, ...combinedData.map(t => t.year)])]
+            .sort((a, b) => b - a);
+        const roadContainer = document.getElementById('road-container');
+        years.forEach(year => {
+            const isCurrent = year === currentYear;
+            const wrap = document.createElement('div');
+            wrap.className = isCurrent ? 'milestone-wrap current-wrap' : 'milestone-wrap';
+            const link = document.createElement('a');
+            link.href = `forest.html?year=${year}`;
+            link.className = isCurrent ? 'milestone current-year' : 'milestone';
+            link.textContent = year;
+            wrap.appendChild(link);
+            roadContainer.appendChild(wrap);
+        });
+    </script>
+</body>
+</html>
