@@ -22,7 +22,7 @@ Built with vanilla HTML, CSS, and JavaScript. No frameworks, no build step. Just
 | File | Description |
 |---|---|
 | `index.html` | Home — lifetime stats and year timeline |
-| `forest.html?year=YYYY` | Yearly view — map + sapling list for a specific year |
+| `forest.html` | Yearly view — map + sapling list for a specific year (pass `?year=YYYY`) |
 | `overall-forest.html` | Full lifetime forest — all trees across all years |
 | `data.js` | Static seed data — add your trees here |
 
