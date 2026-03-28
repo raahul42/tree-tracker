@@ -76,7 +76,7 @@ No npm, no bundler, no dependencies to install.
 ## Running locally
 
 ```bash
-git clone https://github.com/your-username/tree-tracker.git
+git clone https://github.com/raahul42/tree-tracker.git
 cd tree-tracker
 open index.html   # macOS
 ```
