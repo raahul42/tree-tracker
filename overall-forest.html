@@ -6,330 +6,57 @@
     <title>Overall Lifetime Forest</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <style>
-        * { box-sizing: border-box; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        body {
-            background: linear-gradient(rgba(8, 20, 10, 0.72), rgba(8, 20, 10, 0.88)),
-                        url('https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=2560&auto=format&fit=crop') no-repeat center center fixed;
-            background-size: cover;
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0 20px 60px;
-            color: #fff;
-            animation: fadeIn 0.35s ease;
-        }
-
-        /* Top nav */
-        .top-nav {
-            display: flex;
-            align-items: center;
-            padding: 20px 0 0 0;
-            margin-bottom: 24px;
-        }
-
-        .nav-back {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            color: rgba(255,255,255,0.55);
-            text-decoration: none;
-            font-size: 0.8rem;
-            font-weight: 500;
-            background: rgba(255,255,255,0.07);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 7px 14px;
-            border-radius: 100px;
-            transition: all 0.2s;
-        }
-        .nav-back:hover {
-            background: rgba(255,255,255,0.12);
-            color: rgba(255,255,255,0.9);
-            border-color: rgba(255,255,255,0.2);
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 2rem;
-            font-weight: 300;
-            letter-spacing: -0.3px;
-            margin: 0 0 6px 0;
-            color: #fff;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: rgba(255,255,255,0.4);
-            font-size: 0.875rem;
-            font-weight: 400;
-            margin-bottom: 28px;
-        }
-
-        /* Stats dashboard */
-        .dashboard {
-            display: flex;
-            justify-content: center;
-            max-width: 800px;
-            margin: 0 auto 28px auto;
-            gap: 12px;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 18px 28px;
-            border-radius: 16px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            flex: 1;
-        }
-
-        .stat-card h3 {
-            margin: 0 0 8px 0;
-            font-size: 0.68rem;
-            font-weight: 500;
-            color: rgba(255,255,255,0.4);
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-        }
-
-        .stat-card p {
-            margin: 0;
-            font-size: 1.8rem;
-            font-weight: 300;
-            color: #fff;
-            letter-spacing: -0.5px;
-        }
-
-        .stat-card p .unit {
-            font-size: 0.85rem;
-            font-weight: 400;
-            color: rgba(255,255,255,0.45);
-            letter-spacing: 0;
-        }
-
-        /* Layout */
-        .content-split {
-            display: flex;
-            max-width: 1400px;
-            margin: 0 auto;
-            gap: 16px;
-            height: 620px;
-        }
-
-        /* Card list */
-        .tree-list-container {
-            flex: 1.2;
-            padding: 20px;
-            overflow-y: auto;
-            border-radius: 16px;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.07);
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255,255,255,0.1) transparent;
-        }
-
-        .list-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-        }
-
-        .list-header h3 {
-            margin: 0;
-            font-size: 0.7rem;
-            font-weight: 500;
-            color: rgba(255,255,255,0.35);
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-        }
-
-        .list-count-badge {
-            background: rgba(255,255,255,0.07);
-            color: rgba(255,255,255,0.4);
-            font-size: 0.7rem;
-            font-weight: 500;
-            padding: 2px 9px;
-            border-radius: 100px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .sleek-card {
-            position: relative;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 16px 18px;
-            margin-bottom: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .sleek-card:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255,255,255,0.18);
-            transform: translateY(-2px);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .card-header strong {
-            font-size: 0.95rem;
-            font-weight: 500;
-            color: #fff;
-        }
-
-        .card-header .badge {
-            background: rgba(255, 255, 255, 0.08);
-            color: rgba(255,255,255,0.6);
-            padding: 3px 10px;
-            border-radius: 100px;
-            font-size: 0.72rem;
-            font-weight: 500;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .card-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.03);
-            padding: 10px 12px;
-            border-radius: 8px;
-        }
-
-        .card-stats div { display: flex; flex-direction: column; }
-        .card-stats span:first-child {
-            color: rgba(255,255,255,0.35);
-            text-transform: uppercase;
-            font-size: 0.65rem;
-            letter-spacing: 0.08em;
-            font-weight: 500;
-            margin-bottom: 2px;
-        }
-        .card-stats span:last-child {
-            color: #fff;
-            font-weight: 400;
-            font-size: 0.875rem;
-        }
-
-        .delete-btn {
-            position: absolute;
-            bottom: 14px;
-            right: 14px;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.4);
-            border-radius: 50%;
-            width: 22px;
-            height: 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 0.65rem;
-            opacity: 0;
-            transition: all 0.2s;
-            padding: 0;
-            line-height: 1;
-        }
-
-        .sleek-card:hover .delete-btn { opacity: 1; }
-
-        .delete-btn:hover {
-            background: rgba(220, 50, 50, 0.25);
-            border-color: rgba(220, 50, 50, 0.4);
-            color: #ff7f7f;
-        }
-
-        /* Map */
-        #map {
-            flex: 2;
-            border-radius: 16px;
-            box-shadow: 0 8px 40px rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.07);
-        }
-
-        .custom-tree-icon { background: none; border: none; }
-
-        /* Popups */
-        .leaflet-popup-content-wrapper {
-            background: rgba(255,255,255,0.97);
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-            color: #111;
-            border: none;
-            padding: 2px;
-        }
-        .leaflet-popup-tip { background: rgba(255,255,255,0.97); }
-        .leaflet-popup-content { margin: 14px; line-height: 1.6; font-family: 'Inter', sans-serif; }
-        .leaflet-popup-content b { color: #111; font-size: 0.95rem; font-weight: 600; display: block; margin-bottom: 4px; }
-        .leaflet-popup-content span { color: #555; font-size: 0.82rem; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="top-nav">
+    <nav class="top-nav">
         <a href="index.html" class="nav-back">← Timeline</a>
-    </div>
+    </nav>
 
-    <h1>Lifetime Forest</h1>
-    <p class="subtitle">Your complete forest, to date.</p>
+    <header>
+        <h1 class="page-title">Lifetime Forest</h1>
+        <p class="subtitle page-subtitle">Your complete forest, to date.</p>
+    </header>
 
-    <div class="dashboard">
-        <div class="stat-card">
-            <h3>Total Trees</h3>
-            <p id="total-trees">0</p>
-        </div>
-        <div class="stat-card">
-            <h3>CO₂ Captured</h3>
-            <p><span id="total-co2">0</span> <span class="unit">kg</span></p>
-        </div>
-        <div class="stat-card">
-            <h3>Green Cover</h3>
-            <p><span id="total-cover">0</span> <span class="unit">m²</span></p>
-        </div>
-    </div>
-
-    <div class="content-split">
-        <div class="tree-list-container" id="list-container">
-            <div class="list-header">
-                <h3>All Saplings</h3>
-                <span class="list-count-badge" id="list-count">0</span>
+    <main>
+        <section class="dashboard">
+            <div class="stat-card compact">
+                <h3>Total Trees</h3>
+                <p id="total-trees">0</p>
             </div>
-            <div id="tree-list"></div>
-        </div>
-        <div id="map"></div>
-    </div>
+            <div class="stat-card compact">
+                <h3>CO₂ Captured</h3>
+                <p><span id="total-co2">0</span> <span class="unit">kg</span></p>
+            </div>
+            <div class="stat-card compact">
+                <h3>Green Cover</h3>
+                <p><span id="total-cover">0</span> <span class="unit">m²</span></p>
+            </div>
+        </section>
+
+        <section class="content-split">
+            <div class="tree-list-container" id="list-container">
+                <div class="list-header">
+                    <h3>All Saplings</h3>
+                    <span class="list-count-badge" id="list-count">0</span>
+                </div>
+                <div id="tree-list"></div>
+            </div>
+            <div id="map">
+                <button class="locate-btn" id="locate-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+                    Find My Location
+                </button>
+            </div>
+        </section>
+    </main>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="utils.js"></script>
     <script src="data.js"></script>
     <script>
-        const baseMaps = createMapLayers();
-        const savedMapStyle = localStorage.getItem('preferredMapStyle') || 'Minimal Light';
-        const initialLayer = baseMaps[savedMapStyle] || baseMaps['Minimal Light'];
-
-        const map = L.map('map', { center: [28.4595, 77.0266], zoom: 13, layers: [initialLayer] });
-        L.control.layers(baseMaps).addTo(map);
-        map.on('baselayerchange', e => localStorage.setItem('preferredMapStyle', e.name));
-
+        const map = initForestMap('map', [28.4595, 77.0266], 13);
         const markers = {};
         const listContainer = document.getElementById('tree-list');
         const currentYear = new Date().getFullYear();
@@ -351,16 +78,13 @@
         }
 
         function renderTree(tree, isLocal) {
+            const impact = getTreeImpact(tree, currentYear);
             if (!tree.count || !tree.year || tree.age == null) return;
 
             cardCount += 1;
             totalTreeCount += tree.count;
-
-            const yearsActive = Math.max(0, (currentYear - tree.year) + tree.age);
-            const co2Captured = tree.count * yearsActive * 10;
-            const greenCover = tree.count * 4;
-            totalCO2 += co2Captured;
-            totalGreenCover += greenCover;
+            totalCO2 += impact.co2Captured;
+            totalGreenCover += impact.greenCover;
 
             const iconSizePx = 16 + (tree.age * 4);
             const treeIcon = L.divIcon({
@@ -371,7 +95,8 @@
             });
 
             const marker = L.marker([tree.lat, tree.lng], { icon: treeIcon }).addTo(map);
-            marker.bindPopup(`<b>${tree.type}</b><br><span>Count: ${tree.count} · Planted: ${tree.year}</span>`);
+            const safeType = escapeHTML(tree.type);
+            marker.bindPopup(`<b>${safeType}</b><br><span>Count: ${tree.count} · Planted: ${tree.year}</span>`);
             markers[tree.id] = marker;
 
             const card = document.createElement('div');
@@ -390,10 +115,10 @@
             const statsDiv = document.createElement('div');
             statsDiv.className = 'card-stats';
             statsDiv.innerHTML = `
-                <div><span>Planted</span><span>${tree.month} ${tree.year}</span></div>
-                <div><span>Now Growing</span><span>${yearsActive} yr${yearsActive !== 1 ? 's' : ''}</span></div>
-                <div><span>CO₂ Captured</span><span>${co2Captured.toLocaleString()} kg</span></div>
-                <div><span>Green Cover</span><span>${greenCover.toLocaleString()} m²</span></div>
+                <div><span>Planted</span><span>${escapeHTML(tree.month)} ${tree.year}</span></div>
+                <div><span>Now Growing</span><span>${impact.yearsActive} yr${impact.yearsActive !== 1 ? 's' : ''}</span></div>
+                <div><span>CO₂ Captured</span><span>${impact.co2Captured.toLocaleString()} kg</span></div>
+                <div><span>Green Cover</span><span>${impact.greenCover.toLocaleString()} m²</span></div>
             `;
 
             card.appendChild(headerDiv);
@@ -410,8 +135,8 @@
                     map.removeLayer(markers[tree.id]);
                     delete markers[tree.id];
                     totalTreeCount -= tree.count;
-                    totalCO2 -= co2Captured;
-                    totalGreenCover -= greenCover;
+                    totalCO2 -= impact.co2Captured;
+                    totalGreenCover -= impact.greenCover;
                     cardCount -= 1;
                     card.remove();
                     updateDashboard();
@@ -441,6 +166,22 @@
                 () => {}
             );
         }
+
+        document.getElementById('locate-btn').addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    const { latitude: lat, longitude: lng } = position.coords;
+                    map.flyTo([lat, lng], 15);
+                    L.popup()
+                        .setLatLng([lat, lng])
+                        .setContent("<b style='color:#111;'>You are here</b><br><span style='color:#555; font-size:0.85em;'>Your current location.</span>")
+                        .openOn(map);
+                }, () => {
+                    console.warn('Location access denied.');
+                });
+            }
+        });
 
     </script>
 </body>
