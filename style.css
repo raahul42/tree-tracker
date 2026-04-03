@@ -448,6 +448,19 @@ h1.page-title {
     transform: scale(1.1);
 }
 
+.portfolio-link {
+    position: absolute;
+    top: 24px;
+    left: 32px;
+    color: rgba(255, 255, 255, 0.6);
+    transition: color 0.3s, transform 0.3s;
+}
+
+.portfolio-link:hover {
+    color: #fff;
+    transform: scale(1.1);
+}
+
 .empty-state p {
     margin: 0;
     font-size: 0.82rem;
