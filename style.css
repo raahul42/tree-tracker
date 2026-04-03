@@ -41,10 +41,12 @@ h1.page-title {
 }
 
 .subtitle {
-    color: rgba(255,255,255,0.5);
-    font-size: 1rem;
+    color: rgba(255,255,255,0.7);
+    font-size: 1.05rem;
     font-weight: 400;
-    margin: 0;
+    margin: 0 auto;
+    max-width: 650px;
+    line-height: 1.6;
 }
 
 .subtitle.page-subtitle {
@@ -431,6 +433,19 @@ h1.page-title {
 .empty-state .empty-icon {
     font-size: 2rem;
     opacity: 0.4;
+}
+
+.github-link {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    color: rgba(255, 255, 255, 0.6);
+    transition: color 0.3s, transform 0.3s;
+}
+
+.github-link:hover {
+    color: #fff;
+    transform: scale(1.1);
 }
 
 .empty-state p {
