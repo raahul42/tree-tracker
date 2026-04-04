@@ -438,7 +438,7 @@ h1.page-title {
 
 .github-link {
     position: absolute;
-    top: 24px;
+    top: 0;
     right: 32px;
     color: rgba(255, 255, 255, 0.6);
     transition: color 0.3s, transform 0.3s;
@@ -451,7 +451,7 @@ h1.page-title {
 
 .portfolio-link {
     position: absolute;
-    top: 24px;
+    top: 0;
     left: 32px;
     color: rgba(255, 255, 255, 0.6);
     transition: color 0.3s, transform 0.3s;
@@ -544,3 +544,35 @@ h1.page-title {
 }
 .locate-btn:hover { background: #fff; transform: scale(1.03); }
 .locate-btn svg { width: 14px; height: 14px; }
+
+/* Responsive adjustments for mobile */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.2rem;
+        margin-top: 52px;
+    }
+    h1.page-title {
+        font-size: 1.8rem;
+    }
+    .portfolio-link {
+        left: 10px;
+    }
+    .github-link {
+        right: 10px;
+    }
+    .content-split {
+        flex-direction: column;
+        height: auto;
+    }
+    #map {
+        order: -1;
+        height: 350px;
+        flex: none;
+        width: 100%;
+    }
+    .tree-list-container {
+        height: 350px;
+        flex: none;
+        width: 100%;
+    }
+}
