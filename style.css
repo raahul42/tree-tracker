@@ -436,10 +436,19 @@ h1.page-title {
     opacity: 0.4;
 }
 
-.github-link {
+.header-links {
     position: absolute;
     top: 0;
-    right: 32px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 32px;
+}
+
+.github-link {
+    position: static;
     color: rgba(255, 255, 255, 0.6);
     transition: color 0.3s, transform 0.3s;
 }
@@ -450,9 +459,7 @@ h1.page-title {
 }
 
 .portfolio-link {
-    position: absolute;
-    top: 0;
-    left: 32px;
+    position: static;
     color: rgba(255, 255, 255, 0.6);
     transition: color 0.3s, transform 0.3s;
 }
@@ -549,16 +556,15 @@ h1.page-title {
 @media (max-width: 768px) {
     h1 {
         font-size: 2.2rem;
-        margin-top: 52px;
+        margin-top: 0;
     }
     h1.page-title {
         font-size: 1.8rem;
     }
-    .portfolio-link {
-        left: 10px;
-    }
-    .github-link {
-        right: 10px;
+    .header-links {
+        position: static;
+        padding: 0 10px;
+        margin-bottom: 16px;
     }
     .content-split {
         flex-direction: column;
